@@ -25,7 +25,7 @@
 
   <meta name="og:url" content="{{ site.url }}{{ url }}">
   <meta name="og:title" content="{% if title %}{{ title | escape }} | {% endif %} {{ site.url | url }}">
-  <meta name="og:description" content="Some snippets I thought worth highlighting and saving for later">
+  <meta name="og:description" content="Book highlights">
 
   {% if book %}
     {% set book_cover = '/assets/images/covers/' + book + '.jpg' %}
@@ -39,4 +39,6 @@
 
   <link href="https://fonts.googleapis.com/css?family=Karla|Sorts+Mill+Goudy" rel="stylesheet">
   <link rel="stylesheet" href="{{ '/assets/css/style.css?v2021.06.17' | url }}">
+
+  <script defer data-domain="highlights.felixzieger.de" src="https://plausible.sonnenhof-zieger.de/js/script.js"></script>
 </head>
