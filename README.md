@@ -14,7 +14,6 @@ Source for highlights.felixzieger.de. Forked from https://github.com/melanierich
 | Command                    | Purpose                      |
 | -------------------------- | ---------------------------- |
 | npm run start              | Serve project + watch Sass   |
-| netlify build              | Kick off a Netlify build locally. Useful for local validation w/ Netlify plugins. |
 
 ## Data syntax
 
