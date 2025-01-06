@@ -1,4 +1,4 @@
-# Highlights
+# highlights
 
 This is the source for https://highlights.felixzieger.de/.
 
