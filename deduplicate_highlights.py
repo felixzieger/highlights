@@ -29,7 +29,9 @@ def remove_shorter_duplicates(file_path):
     for entry in longest_entries.values():
         text = entry["text"]
         # Check for partial matches
-        if not any(text in seen for seen in seen_texts):
+        if not any(text in seen for seen in seen_texts) and not any(
+            seen in text for seen in seen_texts
+        ):
             filtered_data.append(entry)
             seen_texts.add(text)
 
