@@ -1,6 +1,8 @@
 # Highlights
 
-Source for highlights.felixzieger.de. Forked from https://github.com/melanierichards/highlights.
+This is the source for https://highlights.felixzieger.de/.
+
+Forked from [melanierichards/highlights](https://github.com/melanierichards/highlights).
 
 ## To build
 
