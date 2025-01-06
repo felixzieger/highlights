@@ -28,9 +28,6 @@
     <div class="book__image">
       <img src="{{ current_book_cover | url }}" alt="Cover of {{ current_book_title }}">
     </div>
-    {% if current_bookshop_id %}
-      <a class="book__buy" href="https://bookshop.org/a/15644/{{ current_bookshop_id }}">Buy {% if not individualPost %}“{{ current_book_title }}” {% endif %}on Bookshop</a>
-    {% endif %}
   </div>
 
   <section class="highlights-wrap" aria-labelledby="highlightsHeading">
