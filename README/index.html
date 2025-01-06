@@ -1,0 +1,64 @@
+<h1>Highlights</h1>
+<p>Source for highlights.felixzieger.de. Forked from https://github.com/melanierichards/highlights.</p>
+<h2>To build</h2>
+<ol>
+<li><a href="https://nodejs.org/">Install Node/npm</a></li>
+<li>Run <code>npm install</code></li>
+<li>Run <code>npx @11ty/eleventy --serve</code></li>
+<li>Visit <code>localhost:8080</code></li>
+</ol>
+<h2>Commands</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>npm run start</td>
+<td>Serve project + watch Sass</td>
+</tr>
+</tbody>
+</table>
+<h2>Data syntax</h2>
+<h3>Book front-page matter</h3>
+<pre><code>---
+title: &quot;&quot;
+book: dash-separated
+author:
+kindle: true
+spoilers: false
+content_warnings:
+date: YYYY-MM-DD
+bookshop_id:
+---
+</code></pre>
+<ul>
+<li>Where &quot;dash-separated&quot; is also the file name for the <code>_data</code> file, JPG, and SVG.</li>
+</ul>
+<h3>Each highlight</h3>
+<pre><code>- text: 
+  page: 
+  attribution: 
+</code></pre>
+<h3>Cover image sizes</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Image</th>
+<th style="text-align:left">Width</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Full-res cover</td>
+<td style="text-align:left">400px</td>
+</tr>
+<tr>
+<td style="text-align:left">SVG</td>
+<td style="text-align:left">200px</td>
+</tr>
+</tbody>
+</table>
