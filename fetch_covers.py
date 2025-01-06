@@ -6,8 +6,9 @@ import yaml
 import glob
 
 
-def get_cover_url(isbn):
-    """Get cover URL from OpenLibrary API"""
+def get_cover_url(isbn, title, author):
+    """Try to get cover URL from multiple book APIs"""
+    # Try OpenLibrary first
     url = (
         f"https://openlibrary.org/api/books?bibkeys=ISBN:{isbn}&format=json&jscmd=data"
     )
@@ -18,6 +19,40 @@ def get_cover_url(isbn):
             book_data = data[f"ISBN:{isbn}"]
             if "cover" in book_data:
                 return book_data["cover"]["large"]
+
+    # Try Google Books API with ISBN
+    google_url = f"https://www.googleapis.com/books/v1/volumes?q=isbn:{isbn}"
+    response = requests.get(google_url)
+    if response.status_code == 200:
+        data = response.json()
+        if "items" in data and len(data["items"]) > 0:
+            volume_info = data["items"][0]["volumeInfo"]
+            if "imageLinks" in volume_info:
+                # Get largest available image
+                if "extraLarge" in volume_info["imageLinks"]:
+                    return volume_info["imageLinks"]["extraLarge"]
+                elif "large" in volume_info["imageLinks"]:
+                    return volume_info["imageLinks"]["large"]
+                elif "thumbnail" in volume_info["imageLinks"]:
+                    return volume_info["imageLinks"]["thumbnail"]
+
+    # Try Google Books API with title and author as final fallback
+    search_query = f"{title} {author}".replace(" ", "+")
+    google_url = f"https://www.googleapis.com/books/v1/volumes?q={search_query}"
+    response = requests.get(google_url)
+    if response.status_code == 200:
+        data = response.json()
+        if "items" in data and len(data["items"]) > 0:
+            volume_info = data["items"][0]["volumeInfo"]
+            if "imageLinks" in volume_info:
+                # Get largest available image
+                if "extraLarge" in volume_info["imageLinks"]:
+                    return volume_info["imageLinks"]["extraLarge"]
+                elif "large" in volume_info["imageLinks"]:
+                    return volume_info["imageLinks"]["large"]
+                elif "thumbnail" in volume_info["imageLinks"]:
+                    return volume_info["imageLinks"]["thumbnail"]
+
     return None
 
 
@@ -75,11 +110,15 @@ def main():
 
                     # Skip if file already exists
                     if os.path.exists(output_path):
-                        print(f"Skipping {front_matter['book']}, cover already exists")
+                        # print(f"Skipping {front_matter['book']}, cover already exists")
                         continue
 
                     print(f"Fetching cover for {front_matter['book']}...")
-                    cover_url = get_cover_url(isbn)
+                    cover_url = get_cover_url(
+                        isbn,
+                        title=front_matter["title"],
+                        author=front_matter["author"],
+                    )
 
                     if cover_url:
                         try:
@@ -97,6 +136,8 @@ def main():
                             print(f"Error processing {front_matter['book']}: {str(e)}")
                     else:
                         print(f"No cover found for {front_matter['book']}")
+                else:
+                    print("No ISBN found for book", post_file)
         except Exception as e:
             print(f"Error processing file {post_file}: {str(e)}")
 
