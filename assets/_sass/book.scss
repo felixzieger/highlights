@@ -68,22 +68,6 @@ a.book__buy {
   }
 }
 
-@media (hover) {
-  a.book__image {
-    svg {
-      opacity: 1;
-      transition: opacity 400ms;
-    }
-
-    &:hover,
-    &:focus {
-      svg {
-        opacity: 0;
-      }
-    }
-  }
-}
-
 .highlights-wrap {
   padding-top: 1.25em;
   border-top: 1px solid $color-border;
