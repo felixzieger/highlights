@@ -43,10 +43,3 @@ bookshop_id:
   page: 
   attribution: 
 ```
-
-### Cover image sizes
-
-| Image          | Width |
-| :------------- | :---- |
-| Full-res cover | 400px |
-| SVG            | 200px |

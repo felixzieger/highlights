@@ -44,19 +44,6 @@
   background-size: 100% auto;
 }
 
-a.book__image {
-  opacity: .75;
-  transition: opacity 400ms;
-
-  svg {
-    opacity: 0;
-  }
-
-  &:hover {
-    opacity: 1;
-  }
-}
-
 a.book__buy {
   border-bottom: 1px solid;
   font-family: $font-secondary;
@@ -65,22 +52,6 @@ a.book__buy {
   &:hover {
     background-color: #fff;
     color: #000;
-  }
-}
-
-@media (hover) {
-  a.book__image {
-    svg {
-      opacity: 1;
-      transition: opacity 400ms;
-    }
-
-    &:hover,
-    &:focus {
-      svg {
-        opacity: 0;
-      }
-    }
   }
 }
 
