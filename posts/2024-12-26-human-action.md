@@ -1,6 +1,6 @@
 ---
-title: "Human Action Scholars Edition"
-book: human-action-scholars-edition
+title: "Human Action"
+book: human-action
 author: Ludwig von Mises
 kindle: true
 date: 2024-12-26
