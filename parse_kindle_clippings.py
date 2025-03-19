@@ -191,21 +191,25 @@ def main():
     # Generate files for each book
     for title, author in books:
         # Generate YAML file
-        yaml_content = generate_yaml(clippings, title)
         yaml_filename = f"_data/books/{slugify(title)}.yaml"
-        with open(yaml_filename, "w", encoding="utf-8") as f:
-            f.write(yaml_content)
+        if os.path.exists(yaml_filename):
+            print(f"Skipping {yaml_filename}: File already exists")
+        else:
+            yaml_content = generate_yaml(clippings, title)
+            with open(yaml_filename, "w", encoding="utf-8") as f:
+                f.write(yaml_content)
 
         # Get last highlight date
         last_highlight_date = get_last_highlight_date(clippings, title)
 
         # Generate post file
-        post_content = generate_post(title, author, last_highlight_date)
-        post_filename = (
-            f"posts/{last_highlight_date.strftime('%Y-%m-%d')}-{slugify(title)}.md"
-        )
-        with open(post_filename, "w", encoding="utf-8") as f:
-            f.write(post_content)
+        post_filename = f"posts/{last_highlight_date.strftime('%Y-%m-%d')}-{slugify(title)}.md"
+        if os.path.exists(post_filename):
+            print(f"Skipping {post_filename}: File already exists")
+        else:
+            post_content = generate_post(title, author, last_highlight_date)
+            with open(post_filename, "w", encoding="utf-8") as f:
+                f.write(post_content)
 
 
 if __name__ == "__main__":

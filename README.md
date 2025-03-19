@@ -43,3 +43,11 @@ bookshop_id:
   page: 
   attribution: 
 ```
+
+## Python helpers for importing kindle clippings
+
+```
+nix develop
+python parse_kindle_clippings.py
+python deduplicate_highlights.py
+```
