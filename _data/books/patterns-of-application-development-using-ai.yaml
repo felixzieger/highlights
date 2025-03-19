@@ -1,0 +1,12 @@
+- text: In contrast to the way that you and I think, an AI model’s “thinking” via
+    inference happens in all in one stateless operation. That is, it’s thinking is
+    limited to its generation process. It literally has to think out loud, as if I
+    asked you a question and only accepted a response from you in “stream of consciousness”
+    style.
+  page: Page 28
+- text: I like to think of my AI components as little, almost-human virtual “workers”
+    that can be seamlessly integrated into my application logic to perform specific
+    tasks or make complex decisions. The idea is to purposely humanize the LLM’s capabilities,
+    so that nobody gets too excited and assigns them magical qualities that they do
+    not possess.
+  page: Page 129
