@@ -6,16 +6,15 @@ Forked from [melanierichards/highlights](https://github.com/melanierichards/high
 
 ## To build
 
-1. [Install Node/npm](https://nodejs.org/)
-2. Run `npm install`
-3. Run `npx @11ty/eleventy --serve`
-4. Visit `localhost:8080`
+1. Run `pnpm install`
+2. Run `pnpm run dev`
+3. Visit `localhost:8080`
 
 ## Commands
 
 | Command                    | Purpose                      |
 | -------------------------- | ---------------------------- |
-| npm run start              | Serve project + watch Sass   |
+| pnpm run dev               | Serve project + watch Sass   |
 
 ## Data syntax
 
@@ -46,8 +45,28 @@ bookshop_id:
 
 ## Python helpers for importing kindle clippings
 
+### Setup
+
+Install [uv](https://docs.astral.sh/uv/) if you haven't already:
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
-nix develop
+
+Then install Python dependencies:
+```bash
+uv sync
+```
+
+### Usage
+
+```bash
+uv run python parse_kindle_clippings.py
+uv run python deduplicate_highlights.py
+```
+
+Or activate the virtual environment:
+```bash
+source .venv/bin/activate
 python parse_kindle_clippings.py
 python deduplicate_highlights.py
 ```

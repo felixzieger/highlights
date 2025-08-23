@@ -9,7 +9,7 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy("robots.txt");
 
   // Keep highlight data files working after conversion from Jekyll
-  eleventyConfig.addDataExtension("yaml", contents => yaml.safeLoad(contents));
+  eleventyConfig.addDataExtension("yaml", contents => yaml.load(contents));
 
   // Insert SVG contents
   eleventyConfig.addPlugin(svgContents);

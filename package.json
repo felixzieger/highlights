@@ -4,11 +4,11 @@
   "description": "![Screenshot of the website](assets/images/screenshot.png?raw=true)",
   "main": ".eleventy.js",
   "scripts": {
-    "sass": "npx sass --style=compressed assets/_sass/style.scss assets/css/style.css",
-    "watch:sass": "npm run sass -- --watch",
-    "watch:eleventy": "npx @11ty/eleventy --serve",
-    "start": "npm-run-all sass --parallel watch:*",
-    "build": "npx @11ty/eleventy"
+    "sass": "pnpx sass --style=compressed assets/_sass/style.scss assets/css/style.css",
+    "watch:sass": "pnpx sass --style=compressed assets/_sass/style.scss assets/css/style.css --watch",
+    "watch:eleventy": "pnpx @11ty/eleventy --serve",
+    "dev": "npm-run-all sass --parallel watch:*",
+    "build": "pnpx @11ty/eleventy"
   },
   "repository": {
     "type": "git",
@@ -22,11 +22,11 @@
   },
   "homepage": "https://github.com/melanierichards/highlights#readme",
   "dependencies": {
-    "@11ty/eleventy": "^2.0.1",
+    "@11ty/eleventy": "^3.1.2",
     "eleventy-plugin-svg-contents": "^0.7.0",
-    "js-yaml": "^3.14.0",
-    "netlify-plugin-html-validate": "^1.0.0",
+    "js-yaml": "^4.1.0",
+    "netlify-plugin-html-validate": "^1.1.1",
     "npm-run-all": "^4.1.5",
-    "sass": "^1.43.4"
+    "sass": "^1.90.0"
   }
 }
