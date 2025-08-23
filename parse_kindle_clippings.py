@@ -3,6 +3,7 @@ from datetime import datetime
 import yaml
 import os
 import locale
+import subprocess
 
 
 def clean_title(title):
@@ -173,6 +174,36 @@ def slugify(text):
     return text.strip("-")
 
 
+def get_latest_tracked_book_date():
+    """Get the date of the most recent book tracked in git"""
+    try:
+        # Get the most recent git-tracked post file
+        result = subprocess.run(
+            ["git", "ls-files", "posts/*.md"],
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        
+        if not result.stdout:
+            return None
+            
+        # Sort the files and get the most recent one
+        files = result.stdout.strip().split('\n')
+        files.sort(reverse=True)
+        
+        if files:
+            # Extract date from filename (format: posts/YYYY-MM-DD-*.md)
+            latest_file = files[0]
+            date_match = re.search(r'posts/(\d{4}-\d{2}-\d{2})', latest_file)
+            if date_match:
+                return datetime.strptime(date_match.group(1), '%Y-%m-%d')
+    except subprocess.CalledProcessError:
+        print("Warning: Could not get git-tracked files")
+    
+    return None
+
+
 def main():
     # Read My Clippings.txt
     with open("My Clippings.txt", "r", encoding="utf-8") as f:
@@ -184,12 +215,33 @@ def main():
     # Get unique books
     books = {(c["title"], c["author"]) for c in clippings}
 
+    # Get the latest tracked book date
+    latest_tracked_date = get_latest_tracked_book_date()
+    
+    if latest_tracked_date:
+        print(f"Latest tracked book date: {latest_tracked_date.strftime('%Y-%m-%d')}")
+        print("Only importing books newer than this date...")
+    else:
+        print("No existing tracked books found. Importing all books...")
+
     # Create _data/books directory if it doesn't exist
     os.makedirs("_data/books", exist_ok=True)
     os.makedirs("posts", exist_ok=True)
 
+    # Track imported and skipped books
+    imported_books = []
+    skipped_books = []
+
     # Generate files for each book
     for title, author in books:
+        # Get last highlight date for this book
+        last_highlight_date = get_last_highlight_date(clippings, title)
+        
+        # Skip if book is older than or equal to the latest tracked book
+        if latest_tracked_date and last_highlight_date <= latest_tracked_date:
+            skipped_books.append((title, last_highlight_date))
+            continue
+            
         # Generate YAML file
         yaml_filename = f"_data/books/{slugify(title)}.yaml"
         if os.path.exists(yaml_filename):
@@ -198,9 +250,7 @@ def main():
             yaml_content = generate_yaml(clippings, title)
             with open(yaml_filename, "w", encoding="utf-8") as f:
                 f.write(yaml_content)
-
-        # Get last highlight date
-        last_highlight_date = get_last_highlight_date(clippings, title)
+            imported_books.append((title, last_highlight_date))
 
         # Generate post file
         post_filename = f"posts/{last_highlight_date.strftime('%Y-%m-%d')}-{slugify(title)}.md"
@@ -210,6 +260,19 @@ def main():
             post_content = generate_post(title, author, last_highlight_date)
             with open(post_filename, "w", encoding="utf-8") as f:
                 f.write(post_content)
+    
+    # Print summary
+    print(f"\n--- Import Summary ---")
+    print(f"Imported {len(imported_books)} new book(s):")
+    for title, date in sorted(imported_books, key=lambda x: x[1]):
+        print(f"  - {title} ({date.strftime('%Y-%m-%d')})")
+    
+    if skipped_books:
+        print(f"\nSkipped {len(skipped_books)} older book(s) (before {latest_tracked_date.strftime('%Y-%m-%d')}):")
+        for title, date in sorted(skipped_books, key=lambda x: x[1], reverse=True)[:5]:
+            print(f"  - {title} ({date.strftime('%Y-%m-%d')})")
+        if len(skipped_books) > 5:
+            print(f"  ... and {len(skipped_books) - 5} more")
 
 
 if __name__ == "__main__":
