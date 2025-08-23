@@ -6,9 +6,9 @@
   "scripts": {
     "sass": "pnpm exec sass --style=compressed assets/_sass/style.scss assets/css/style.css",
     "watch:sass": "pnpm exec sass --style=compressed assets/_sass/style.scss assets/css/style.css --watch",
-    "watch:eleventy": "pnpm exec @11ty/eleventy --serve",
+    "watch:eleventy": "pnpm exec eleventy --serve",
     "dev": "npm-run-all sass --parallel watch:*",
-    "build": "pnpm exec @11ty/eleventy"
+    "build": "pnpm exec eleventy"
   },
   "repository": {
     "type": "git",
