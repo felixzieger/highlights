@@ -4,11 +4,11 @@
   "description": "![Screenshot of the website](assets/images/screenshot.png?raw=true)",
   "main": ".eleventy.js",
   "scripts": {
-    "sass": "pnpx sass --style=compressed assets/_sass/style.scss assets/css/style.css",
-    "watch:sass": "pnpx sass --style=compressed assets/_sass/style.scss assets/css/style.css --watch",
-    "watch:eleventy": "pnpx @11ty/eleventy --serve",
+    "sass": "pnpm exec sass --style=compressed assets/_sass/style.scss assets/css/style.css",
+    "watch:sass": "pnpm exec sass --style=compressed assets/_sass/style.scss assets/css/style.css --watch",
+    "watch:eleventy": "pnpm exec @11ty/eleventy --serve",
     "dev": "npm-run-all sass --parallel watch:*",
-    "build": "pnpx @11ty/eleventy"
+    "build": "pnpm exec @11ty/eleventy"
   },
   "repository": {
     "type": "git",
