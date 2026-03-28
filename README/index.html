@@ -44,19 +44,7 @@ bookshop_id:
   attribution: 
 </code></pre>
 <h2>Python helpers for importing kindle clippings</h2>
-<h3>Setup</h3>
-<p>Install <a href="https://docs.astral.sh/uv/">uv</a> if you haven't already:</p>
-<pre><code class="language-bash">curl -LsSf https://astral.sh/uv/install.sh | sh
-</code></pre>
-<p>Then install Python dependencies:</p>
-<pre><code class="language-bash">uv sync
-</code></pre>
 <h3>Usage</h3>
 <pre><code class="language-bash">uv run python parse_kindle_clippings.py
 uv run python deduplicate_highlights.py
-</code></pre>
-<p>Or activate the virtual environment:</p>
-<pre><code class="language-bash">source .venv/bin/activate
-python parse_kindle_clippings.py
-python deduplicate_highlights.py
 </code></pre>
