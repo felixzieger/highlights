@@ -7,7 +7,7 @@
   {% for post in posts %}
     <li class="cover">
       {% set current_book = post.data.book %}
-      {% set current_cover = '/assets/images/covers/' + current_book + '.jpg' %}
+      {% set current_cover = '/assets/images/covers/' + current_book + '.webp' %}
       <a href="{{ post.url | url }}" class="book__image">
         <img src="{{ current_cover | url }}" alt="{{ post.data.title }}" />
       </a>

@@ -150,7 +150,7 @@ def get_cover_url(isbn, title, author):
 
 
 def process_image(image_data, output_path):
-    """Save image as high-quality JPG without resizing."""
+    """Save image as high-quality WebP without resizing."""
     img = Image.open(BytesIO(image_data))
 
     # Convert to RGB if necessary (in case of PNG with transparency)
@@ -161,8 +161,8 @@ def process_image(image_data, output_path):
     elif img.mode != "RGB":
         img = img.convert("RGB")
 
-    # Save as high-quality JPG (no resize -- let the browser/CSS handle display size)
-    img.save(output_path, "JPEG", quality=90)
+    # Save as high-quality WebP (no resize -- let the browser/CSS handle display size)
+    img.save(output_path, "WEBP", quality=85)
 
 
 def main():
@@ -193,7 +193,7 @@ def main():
                 if "bookshop_id" in front_matter and front_matter["bookshop_id"]:
                     isbn = str(front_matter["bookshop_id"])
                     output_path = os.path.join(
-                        output_dir, f"{front_matter['book']}.jpg"
+                        output_dir, f"{front_matter['book']}.webp"
                     )
 
                     # Skip if file already exists

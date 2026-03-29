@@ -28,7 +28,7 @@
   <meta name="og:description" content="Book highlights">
 
   {% if book %}
-    {% set book_cover = '/assets/images/covers/' + book + '.jpg' %}
+    {% set book_cover = '/assets/images/covers/' + book + '.webp' %}
     <meta name="twitter:image:src" content="{{ book_cover | url }}">
     <meta name="twitter:image:alt" content="Cover of {{ title }}">
     <meta name="og:image" content="{{ book_cover | url }}">
