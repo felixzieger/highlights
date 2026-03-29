@@ -1,8 +1,8 @@
-@import 'sass-helpers';
-@import 'global';
-@import 'header-nav';
-@import 'layout';
-@import 'book'; /* book = books or articles */
-@import 'home';
-@import 'all-page';
-@import 'error';
+@use 'sass-helpers';
+@use 'global';
+@use 'header-nav';
+@use 'layout';
+@use 'book'; /* book = books or articles */
+@use 'home';
+@use 'all-page';
+@use 'error';
