@@ -6,6 +6,48 @@ import locale
 import subprocess
 
 
+def clean_highlight_text(text):
+    """Remove common Kindle highlighting artifacts from text.
+
+    Fixes:
+    - Inline footnote/endnote numbers (e.g., 'questions?"13 That's' -> 'questions?" That's')
+    - Stray dots before quoted/emphasized words (e.g., '.'the good'' -> ''the good'')
+    - Stray dots attached to words (e.g., '.answer.' -> 'answer', 'a.process' -> 'a process')
+    """
+    # Remove inline footnote numbers: punctuation + digits + space + capital letter
+    # e.g., 'required.88 He' -> 'required. He'
+    text = re.sub(
+        r'([.!?"\u201c\u201d\u2019\u2018\'])\s*(\d{1,4})\s+([A-Z])',
+        r"\1 \3",
+        text,
+    )
+
+    # Remove stray dot before opening smart single quote + word
+    # e.g., .'the good' -> 'the good'
+    text = re.sub(r"\.\s*\u2018(\w)", "\u2018\\1", text)
+
+    # Remove stray dot after closing smart single quote
+    # e.g., family,'. and -> family,' and
+    # e.g., '.the family -> 'the family
+    text = re.sub(r"\u2019\.(\s|\w)", "\u2019\\1", text)
+
+    # Remove stray dot after smart left quote used as closing quote
+    # e.g., family,'. and -> family,' and
+    text = re.sub(r"\u2018\.\s", "\u2018 ", text)
+
+    # Remove stray dot before regular single quote + word (non-smart quotes)
+    text = re.sub(r"\.\s*'(\w)", "'\\1", text)
+
+    # Remove stray dot directly attached to a word (space.word. pattern)
+    # e.g., ' .answer.' -> ' answer', ' .it.' -> ' it'
+    text = re.sub(r" \.(\w+)\.", r" \1", text)
+
+    # Fix dot between article and word (e.g., 'a.process' -> 'a process')
+    text = re.sub(r"\b(a|an|the)\.(\w)", r"\1 \2", text)
+
+    return text
+
+
 def clean_title(title):
     """Extract main title before common subtitle separators and clean special characters."""
     # Common subtitle separators
@@ -98,6 +140,9 @@ def parse_clipping(text):
         if not text:
             continue
 
+        # Clean up Kindle artifacts (footnote numbers, stray dots, etc.)
+        text = clean_highlight_text(text)
+
         # Skip notes (we only want highlights)
         if "Notiz" in metadata or "Note" in metadata:
             continue
@@ -159,7 +204,7 @@ title: "{escaped_title}"
 book: {slugify(title)}
 author: {author}
 kindle: true
-date: {date.strftime('%Y-%m-%d')}
+date: {date.strftime("%Y-%m-%d")}
 tags: posts
 ---
 """
@@ -182,25 +227,25 @@ def get_latest_tracked_book_date():
             ["git", "ls-files", "posts/*.md"],
             capture_output=True,
             text=True,
-            check=True
+            check=True,
         )
-        
+
         if not result.stdout:
             return None
-            
+
         # Sort the files and get the most recent one
-        files = result.stdout.strip().split('\n')
+        files = result.stdout.strip().split("\n")
         files.sort(reverse=True)
-        
+
         if files:
             # Extract date from filename (format: posts/YYYY-MM-DD-*.md)
             latest_file = files[0]
-            date_match = re.search(r'posts/(\d{4}-\d{2}-\d{2})', latest_file)
+            date_match = re.search(r"posts/(\d{4}-\d{2}-\d{2})", latest_file)
             if date_match:
-                return datetime.strptime(date_match.group(1), '%Y-%m-%d')
+                return datetime.strptime(date_match.group(1), "%Y-%m-%d")
     except subprocess.CalledProcessError:
         print("Warning: Could not get git-tracked files")
-    
+
     return None
 
 
@@ -217,7 +262,7 @@ def main():
 
     # Get the latest tracked book date
     latest_tracked_date = get_latest_tracked_book_date()
-    
+
     if latest_tracked_date:
         print(f"Latest tracked book date: {latest_tracked_date.strftime('%Y-%m-%d')}")
         print("Only importing books newer than this date...")
@@ -236,12 +281,12 @@ def main():
     for title, author in books:
         # Get last highlight date for this book
         last_highlight_date = get_last_highlight_date(clippings, title)
-        
+
         # Skip if book is older than or equal to the latest tracked book
         if latest_tracked_date and last_highlight_date <= latest_tracked_date:
             skipped_books.append((title, last_highlight_date))
             continue
-            
+
         # Generate YAML file
         yaml_filename = f"_data/books/{slugify(title)}.yaml"
         if os.path.exists(yaml_filename):
@@ -253,22 +298,26 @@ def main():
             imported_books.append((title, last_highlight_date))
 
         # Generate post file
-        post_filename = f"posts/{last_highlight_date.strftime('%Y-%m-%d')}-{slugify(title)}.md"
+        post_filename = (
+            f"posts/{last_highlight_date.strftime('%Y-%m-%d')}-{slugify(title)}.md"
+        )
         if os.path.exists(post_filename):
             print(f"Skipping {post_filename}: File already exists")
         else:
             post_content = generate_post(title, author, last_highlight_date)
             with open(post_filename, "w", encoding="utf-8") as f:
                 f.write(post_content)
-    
+
     # Print summary
     print(f"\n--- Import Summary ---")
     print(f"Imported {len(imported_books)} new book(s):")
     for title, date in sorted(imported_books, key=lambda x: x[1]):
         print(f"  - {title} ({date.strftime('%Y-%m-%d')})")
-    
+
     if skipped_books:
-        print(f"\nSkipped {len(skipped_books)} older book(s) (before {latest_tracked_date.strftime('%Y-%m-%d')}):")
+        print(
+            f"\nSkipped {len(skipped_books)} older book(s) (before {latest_tracked_date.strftime('%Y-%m-%d')}):"
+        )
         for title, date in sorted(skipped_books, key=lambda x: x[1], reverse=True)[:5]:
             print(f"  - {title} ({date.strftime('%Y-%m-%d')})")
         if len(skipped_books) > 5:

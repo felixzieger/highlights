@@ -5,6 +5,9 @@
 _site
 node_modules
 .env
+.venv
+.ruff_cache
+__pycache__
 
 # ----------------------------------------------------------------------
 # | Netlify                                                            |
