@@ -43,11 +43,16 @@ bookshop_id:
   attribution: 
 ```
 
-## Python helpers for importing kindle clippings
+## Python helpers for importing Kindle clippings
 
 ### Usage
 
 ```bash
-uv run python parse_kindle_clippings.py
-uv run python deduplicate_highlights.py
+uv run python scripts/parse_kindle_clippings.py
+uv run python scripts/deduplicate_highlights.py
 ```
+
+Additional helper scripts live in `scripts/`:
+
+- `uv run python scripts/find_missing_isbns.py`
+- `uv run python scripts/fetch_covers.py`
