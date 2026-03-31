@@ -60,24 +60,4 @@
   }
 }
 
-@media (min-width: $bp-l) {
-  .site-header::before,
-  .site-nav::after {
-    display: block;
-    content: '';
-    position: absolute;
-    height: 1px;
-    width: 48px;
-    background: $color-border;
-  }
 
-  .site-header::before {
-    left: -48px;
-    bottom: -1px;
-  }
-
-  .site-nav::after {
-    right: -48px;
-    top: -1px;
-  }
-}
