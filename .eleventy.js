@@ -1,5 +1,5 @@
 const yaml = require("js-yaml");
-const svgContents = require("eleventy-plugin-svg-contents");
+const fs = require("fs");
 
 module.exports = function(eleventyConfig) {
 
@@ -11,8 +11,10 @@ module.exports = function(eleventyConfig) {
   // Keep highlight data files working after conversion from Jekyll
   eleventyConfig.addDataExtension("yaml", contents => yaml.load(contents));
 
-  // Insert SVG contents
-  eleventyConfig.addPlugin(svgContents);
+  // Inline SVG file contents (e.g. icon sprite)
+  eleventyConfig.addFilter("svgContents", file =>
+    fs.readFileSync(`.${file}`, "utf8")
+  );
 
   return {
 
