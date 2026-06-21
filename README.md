@@ -43,16 +43,39 @@ bookshop_id:
   attribution: 
 ```
 
-## Python helpers for importing Kindle clippings
+## Importing Kindle clippings
 
-### Usage
+Copy `My Clippings.txt` from your Kindle (`documents/My Clippings.txt`) into the
+repo root, then run the whole import pipeline with one command:
 
 ```bash
-uv run python scripts/parse_kindle_clippings.py
-uv run python scripts/deduplicate_highlights.py
+pnpm run update            # parse -> dedup -> ISBNs -> covers
+pnpm run update -- --build # ...and build the site afterwards
 ```
 
-Additional helper scripts live in `scripts/`:
+Review the new files under `posts/`, `_data/books/`, and
+`assets/images/covers/`, then commit.
 
-- `uv run python scripts/find_missing_isbns.py`
-- `uv run python scripts/fetch_covers.py`
+### Individual steps
+
+The pipeline runs these `scripts/` in order; each is idempotent, git-aware, and
+can be run on its own:
+
+1. `uv run python scripts/parse_kindle_clippings.py` — parse clippings into posts + highlight data
+2. `uv run python scripts/deduplicate_highlights.py` — clean up newly imported highlights
+3. `uv run python scripts/find_missing_isbns.py` — look up missing ISBNs
+4. `uv run python scripts/fetch_covers.py` — download cover images
+
+### Covers
+
+Covers prefer **portrait** orientation and edition-specific sources (so the
+cover language matches the recorded ISBN), picking the highest resolution.
+
+- **Hand-pick a cover:** drop a `<book-slug>.jpg` (or `.png`/`.webp`) in the
+  repo root. It overrides any fetched cover and is consumed after processing.
+- **Choose between candidates interactively** (opens previews, prompts you):
+  ```bash
+  uv run python scripts/fetch_covers.py --interactive
+  uv run python scripts/fetch_covers.py --interactive --force --book tempo
+  ```
+  `--force` re-fetches even if a cover exists; `--book <slug>` limits to one book.

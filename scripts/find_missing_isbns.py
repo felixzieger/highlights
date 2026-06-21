@@ -250,6 +250,14 @@ def update_post_with_isbn(file_path: Path, isbn: str) -> None:
     # Add bookshop_id
     front_matter["bookshop_id"] = isbn
 
+    def render(key, value):
+        # Emit YAML-style lowercase booleans (not Python's True/False)
+        if isinstance(value, bool):
+            return f"{key}: {str(value).lower()}\n"
+        if isinstance(value, str) and (key == "title" or " " in value):
+            return f'{key}: "{value}"\n'
+        return f"{key}: {value}\n"
+
     # Rebuild content
     new_content = "---\n"
 
@@ -268,19 +276,12 @@ def update_post_with_isbn(file_path: Path, isbn: str) -> None:
 
     for key in ordered_keys:
         if key in front_matter:
-            value = front_matter[key]
-            if isinstance(value, str) and (key == "title" or " " in str(value)):
-                new_content += f'{key}: "{value}"\n'
-            else:
-                new_content += f"{key}: {value}\n"
+            new_content += render(key, front_matter[key])
 
     # Add any other fields not in ordered list
     for key, value in front_matter.items():
         if key not in ordered_keys:
-            if isinstance(value, str) and " " in value:
-                new_content += f'{key}: "{value}"\n'
-            else:
-                new_content += f"{key}: {value}\n"
+            new_content += render(key, value)
 
     new_content += "---\n" + body
 

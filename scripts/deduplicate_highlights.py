@@ -191,7 +191,7 @@ def remove_fragments(file_path):
     return removed
 
 
-if __name__ == "__main__":
+def main():
     directory_path = "_data/books"
     new_files = get_new_yaml_files(directory_path)
 
@@ -216,3 +216,7 @@ if __name__ == "__main__":
     ) - len(new_files)
     if existing_count > 0:
         print(f"Skipped {existing_count} existing file(s) already tracked in git.")
+
+
+if __name__ == "__main__":
+    main()
