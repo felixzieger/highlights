@@ -79,3 +79,28 @@ cover language matches the recorded ISBN), picking the highest resolution.
   uv run python scripts/fetch_covers.py --interactive --force --book tempo
   ```
   `--force` re-fetches even if a cover exists; `--book <slug>` limits to one book.
+
+## Importing KOReader highlights
+
+Export highlights as JSON in KOReader and copy the file to your Mac via USB or
+SSH. Native single-book and multi-book (`documents`) exports and our SSH
+sidecar snapshots (`highlights`) are supported:
+
+```bash
+pnpm run import:koreader /path/to/book.json
+pnpm run build
+```
+
+Multiple input paths are accepted. Existing posts match by full title and author.
+Re-imports append new highlights, deduplicate by position or normalized text,
+and preserve existing quotes and post metadata. They do not propagate deletions
+or overwrite edited highlights. Conflicting slugs fail instead of merging books.
+Plain bookmarks are skipped. Text, notes, chapters, timestamps and available
+position anchors are kept in YAML; the current site displays text and location.
+KOReader pages depend on reading layout and are labelled accordingly.
+
+Review `posts/` and `_data/books/` before committing or publishing. This importer
+performs no network lookups or publishing; use the existing cover workflow.
+Keep raw JSON exports outside the repository.
+
+Run focused tests with `pnpm run test:koreader`.

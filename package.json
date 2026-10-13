@@ -9,7 +9,9 @@
     "watch:eleventy": "pnpm exec eleventy --serve",
     "dev": "npm-run-all sass --parallel watch:*",
     "build": "pnpm exec eleventy",
-    "update": "uv run python scripts/update.py"
+    "update": "uv run python scripts/update.py",
+    "import:koreader": "uv run python scripts/import_koreader.py",
+    "test:koreader": "uv run python -m unittest discover -s scripts -p 'test_import_koreader.py'"
   },
   "repository": {
     "type": "git",
